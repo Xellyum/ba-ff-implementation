@@ -1,62 +1,116 @@
-# ffms
-
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+# feature-flag-management-service
 
 ## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-
 ```shell script
-./mvnw quarkus:dev
+   mvn quarkus:dev
 ```
-
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+
+---
 
 ## Packaging and running the application
 
-The application can be packaged using:
-
+##### The application can be packaged using:
 ```shell script
-./mvnw package
+   mvn package
 ```
-
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
+##### The application can be run using:
 ```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+   docker compose up -d
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+---
 
-## Creating a native executable
+## REST Endpoints
 
-You can create a native executable using:
+### Get Feature Flags
+**GET** `/flag`
 
-```shell script
-./mvnw package -Dnative
+**Query Parameters:**
+
+| Name      | Type   | Description                    |
+|-----------|--------|--------------------------------|
+| `env`     | string | Environment filter (optional)  |
+| `feature` | string | Feature name filter (optional) |
+
+
+### Create new Feature Flag
+**POST** `/flag`
+
+**Request Body (JSON):**
+```json
+{
+  "feature": "new-feature",
+  "active": true,
+  "environments": ["DEVELOPMENT", "PRODUCTION"],
+  "description": "A new feature flag",
+  "createdAt": "2022-03-10T16:15:50Z",
+  "lastUsed": "2022-03-10T16:15:50Z",
+  "dependencies": ["other-feature"]
+}
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+### Edit Feature Flag
+**PUT** `/flag`
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+**Request Body (JSON):**
+```json
+{
+  "feature": "new-feature",
+  "active": true,
+  "environments": ["DEVELOPMENT", "PRODUCTION"],
+  "description": "A new feature flag",
+  "createdAt": "2022-03-10T16:15:50Z",
+  "lastUsed": "2022-03-10T16:15:50Z",
+  "dependencies": ["other-feature"]
+}
 ```
 
-You can then execute your native executable with: `./target/ffms-1.0-SNAPSHOT-runner`
+### Delete Feature Flag
+**DELETE** `/flag`
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+**Path Parameters:**
 
-## Provided Code
+| Name       | Type   | Description  |
+|------------|--------|--------------|
+| `/feature` | string | Feature name |
 
-### REST
+### Create Feature Flag Event (Testing)
+**POST** `/flag/event`
 
-Easily start your REST Web Services
+---
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+## Kafka commands for debugging
+
+### Kafka (bitnami) Commands
+display all topics
+```shell script
+   docker exec -it feature-flag-management-service-kafka-1 kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+
+display messages published to topic  (development-flags)
+```shell script
+   docker exec -it feature-flag-management-service-kafka-1 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic development-flags --from-beginning
+```
+
+```shell script
+   docker exec -it feature-flag-management-service-kafka-1 kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic development-flagss
+```
+
+### Kafka (Confluentinc) Commands
+Display all topics
+```shell script
+   docker exec -it ffms-kafka /usr/bin/kafka-topics --list --bootstrap-server localhost:9093
+```
+
+Display all messages of a topic
+```shell script
+   docker exec -it ffms-kafka /usr/bin/kafka-console-consumer --bootstrap-server localhost:9093 --topic dev-flags --from-beginning
+```
+
+Create new message for a topic
+```shell script
+   echo "Hello, Kafka!" | docker exec -i ffms-kafka /usr/bin/kafka-console-producer --broker-list localhost:9093 --topic dev-flags
+```
