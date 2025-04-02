@@ -1,0 +1,18 @@
+services:
+  nc-quarkus:
+    container_name: nc-quarkus-app
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:h2:file:./database/network_cache_db;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;FILE_LOCK=SOCKET
+      QUARKUS_DATASOURCE_USERNAME: sa
+      QUARKUS_DATASOURCE_PASSWORD: password
+    ports:
+      - "8081:8081"
+    networks:
+      - nc-network
+
+networks:
+  nc-network:
+    driver: bridge

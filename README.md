@@ -2,15 +2,15 @@
 
 ## Start FFMS
 ```shell script
-  docker compose -f feature-flag-management-service/docker-compose.yml up -d
+  docker compose -f feature-flag-management-system/docker-compose.yml up -d
 ```
 
 ## Start NC
 ```shell script
-  docker compose -f nc/docker-compose.yml up -d
+  docker compose -f network-cache/docker-compose.yml up -d
 ```
 
 ## Start PWS
 ```shell script
-  docker compose -f pws/docker-compose.yml up -d
+  docker compose -f production-workflow-simulator/docker-compose.yml up -d
 ```

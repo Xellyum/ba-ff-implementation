@@ -1,0 +1,26 @@
+services:
+  pws-quarkus:
+    build:
+      context: .
+      dockerfile: Dockerfile.jvm
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:h2:file:./database/production_workflow_simulator_db;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;FILE_LOCK=SOCKET
+      QUARKUS_DATASOURCE_USERNAME: sa
+      QUARKUS_DATASOURCE_PASSWORD: password
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      PRODUCTION_WORKFLOW_MANAGER_ENVIRONMENT: DEVELOPMENT
+      FEATURE_FLAG_SERVICE_URL: http://ffms-quarkus:8080
+      NETWORK_CACHE_URL: http://nc-quarkus:8081
+    ports:
+      - "8082"
+    networks:
+      - feature-flag-management-system_ffms-network
+      - network-cache_nc-network
+    deploy:
+      replicas: 10
+
+networks:
+  feature-flag-management-system_ffms-network:
+    external: true
+  network-cache_nc-network:
+    external: true
