@@ -25,7 +25,6 @@ export default function () {
     });
 
     const payload = (__ITER % 2 === 0) ? payload1 : payload2;
-
     const params = {
         headers: {
             'Content-Type': 'application/json',
@@ -33,10 +32,8 @@ export default function () {
     };
 
     let res = http.post(url, payload, params);
-
     check(res, {
         'status is 201': (r) => r.status === 201,
     });
-
-    sleep(1); // think time between iterations
+    sleep(1);
 }
