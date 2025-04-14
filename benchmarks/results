@@ -1,0 +1,44 @@
+FFMS-MAX-REQUESTS
+VUs     Avg response time   errors
+500     2.55ms              0%
+1000    2.59ms              0%
+1500    2.87ms              0%
+2000    3.69ms              0%
+2500    4.89ms              0%
+3000    6.93ms              0%
+3500    13.16ms             1%
+4000    15.34ms             3%
+
+
+NC-MAX-REQUESTS
+VUs     Avg response time   errors
+500     2.07ms              0%
+1000    2.11ms              0%
+1500    2.38ms              0%
+2000    2.53ms              0%
+2500    2.90ms              0%
+3000    3.44ms              0%
+3500    7.72ms              1%
+4000    10.84ms             2%
+
+
+NC-MAX-UPDATES
+VUs     Avg response time   errors
+500     3.03ms              0%
+1000    3.55ms              0%
+1500    4.38ms              0%
+2000    6.48ms              0%
+2500    12.29ms             0%
+3000    22.05ms             0%
+3500    29.79ms             3%
+4000    40.02ms             5%
+
+
+
+
+
+
+
+
+
+
